@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Slider } from "@/components/ui/slider"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,21 +19,37 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Thermometer, Heart, Droplet, Pill, Apple, Moon, Plus, AlertTriangle, Download, Mic } from "lucide-react"
+import {
+  Thermometer,
+  Heart,
+  Droplet,
+  Pill,
+  Apple,
+  Moon,
+  Plus,
+  AlertTriangle,
+  Download,
+  Mic,
+  MessageSquare,
+} from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function HealthObservation() {
   const [temperature, setTemperature] = useState(37)
   const [bloodPressure, setBloodPressure] = useState("120/80")
   const [sugarLevel, setSugarLevel] = useState(100)
   const [medicationGiven, setMedicationGiven] = useState(false)
-  const [foodIntake, setFoodIntake] = useState(3)
-  const [waterIntake, setWaterIntake] = useState(2)
+  const [meals, setMeals] = useState({ morning: false, afternoon: false, evening: false })
+  const [waterIntake, setWaterIntake] = useState(0)
+  const [waterUnit, setWaterUnit] = useState("glasses")
   const [sleepHours, setSleepHours] = useState(8)
+  const [comments, setComments] = useState("")
 
   const healthStatus = "normal" // This would be determined by AI in a real application
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold">Health Observation 🏥</h1>
 
       <Card>
@@ -44,7 +60,7 @@ export default function HealthObservation() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="temperature" className="flex items-center">
                 <Thermometer className="mr-2 h-4 w-4" />
@@ -82,32 +98,66 @@ export default function HealthObservation() {
               <Switch id="medication-given" checked={medicationGiven} onCheckedChange={setMedicationGiven} />
             </div>
             <div>
-              <Label htmlFor="food-intake" className="flex items-center">
+              <Label className="flex items-center">
                 <Apple className="mr-2 h-4 w-4" />
-                Food Intake (meals)
+                Meals
               </Label>
-              <Slider
-                id="food-intake"
-                min={0}
-                max={5}
-                step={1}
-                value={[foodIntake]}
-                onValueChange={(value) => setFoodIntake(value[0])}
-              />
+              <div className="flex space-x-2 mt-2">
+                <div className="flex items-center">
+                  <Checkbox
+                    id="morning-meal"
+                    checked={meals.morning}
+                    onCheckedChange={(checked) => setMeals({ ...meals, morning: checked })}
+                  />
+                  <Label htmlFor="morning-meal" className="ml-2">
+                    Morning
+                  </Label>
+                </div>
+                <div className="flex items-center">
+                  <Checkbox
+                    id="afternoon-meal"
+                    checked={meals.afternoon}
+                    onCheckedChange={(checked) => setMeals({ ...meals, afternoon: checked })}
+                  />
+                  <Label htmlFor="afternoon-meal" className="ml-2">
+                    Afternoon
+                  </Label>
+                </div>
+                <div className="flex items-center">
+                  <Checkbox
+                    id="evening-meal"
+                    checked={meals.evening}
+                    onCheckedChange={(checked) => setMeals({ ...meals, evening: checked })}
+                  />
+                  <Label htmlFor="evening-meal" className="ml-2">
+                    Evening
+                  </Label>
+                </div>
+              </div>
             </div>
             <div>
               <Label htmlFor="water-intake" className="flex items-center">
                 <Droplet className="mr-2 h-4 w-4" />
-                Water Intake (liters)
+                Water Intake
               </Label>
-              <Slider
-                id="water-intake"
-                min={0}
-                max={5}
-                step={0.5}
-                value={[waterIntake]}
-                onValueChange={(value) => setWaterIntake(value[0])}
-              />
+              <div className="flex items-center space-x-2 mt-2">
+                <Input
+                  id="water-intake"
+                  type="number"
+                  value={waterIntake}
+                  onChange={(e) => setWaterIntake(Number(e.target.value))}
+                  className="w-20"
+                />
+                <Select value={waterUnit} onValueChange={setWaterUnit}>
+                  <SelectTrigger className="w-[100px]">
+                    <SelectValue placeholder="Unit" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="glasses">Glasses</SelectItem>
+                    <SelectItem value="liters">Liters</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div>
               <Label htmlFor="sleep-hours" className="flex items-center">
@@ -121,8 +171,21 @@ export default function HealthObservation() {
                 onChange={(e) => setSleepHours(Number(e.target.value))}
               />
             </div>
+            <div className="md:col-span-2">
+              <Label htmlFor="comments" className="flex items-center">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Caregiver Comments
+              </Label>
+              <Textarea
+                id="comments"
+                placeholder="Enter any additional observations or notes here..."
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
+                className="mt-2"
+              />
+            </div>
           </div>
-          <Button className="mt-4 w-full">Save Health Log</Button>
+          <Button className="mt-6 w-full">Save Health Log</Button>
         </CardContent>
       </Card>
 

@@ -2,7 +2,17 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Users, BarChart, MessageSquare, Calendar, Clipboard, Settings, HelpCircle } from "lucide-react"
+import {
+  Home,
+  Users,
+  BarChart,
+  MessageSquare,
+  Calendar,
+  Clipboard,
+  Settings,
+  HelpCircle,
+  Stethoscope,
+} from "lucide-react"
 
 const professionalItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
@@ -12,6 +22,16 @@ const professionalItems = [
   { icon: Clipboard, label: "Health Observations", href: "/health-observation" },
   { icon: Settings, label: "Settings", href: "/caregiver-settings" },
   { icon: HelpCircle, label: "Help", href: "/caregiver-help-support" },
+]
+
+const familyItems = [
+  { icon: Home, label: "Home", href: "/family-dashboard" },
+  { icon: BarChart, label: "Reports", href: "/family/reports" },
+  { icon: Calendar, label: "Schedule", href: "/family/schedule" },
+  { icon: MessageSquare, label: "Messages", href: "/family/messages" },
+  { icon: Stethoscope, label: "Doctor Appointments", href: "/family/doctor-appointments" },
+  { icon: Settings, label: "Settings", href: "/family/settings" },
+  { icon: HelpCircle, label: "Help & Support", href: "/family/help-support" },
 ]
 
 export default function Sidebar() {

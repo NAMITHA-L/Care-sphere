@@ -14,6 +14,7 @@ export default function CaregiverSettings() {
   const [darkMode, setDarkMode] = useState(false)
   const [fontSize, setFontSize] = useState("medium")
   const [voiceCommands, setVoiceCommands] = useState(false)
+  const [language, setLanguage] = useState("en")
 
   return (
     <div className="space-y-6">
@@ -131,6 +132,21 @@ export default function CaregiverSettings() {
               <div className="flex items-center justify-between">
                 <Label htmlFor="voice-commands">Enable Voice Commands</Label>
                 <Switch id="voice-commands" checked={voiceCommands} onCheckedChange={setVoiceCommands} />
+              </div>
+              <div>
+                <Label htmlFor="language">Language</Label>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger id="language">
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="de">Deutsch</SelectItem>
+                    <SelectItem value="zh">中文</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </CardContent>
           </Card>

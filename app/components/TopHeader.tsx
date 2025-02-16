@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { User, Info, LogOut, Search } from "lucide-react"
+import { User, Info, LogOut, Search, Pencil, Save } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,10 +15,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Input } from "@/components/ui/input" // Importing the Input component for the search bar
+import { Input } from "@/components/ui/input"
+import Link from "next/link"
 
 export default function TopHeader() {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [showAbout, setShowAbout] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
   const router = useRouter()
 
   const handleLogout = () => {
@@ -28,6 +32,12 @@ export default function TopHeader() {
   const confirmLogout = () => {
     setShowLogoutConfirm(false)
     router.push("/")
+  }
+
+  // Open Profile and Reset Edit Mode
+  const openProfile = () => {
+    setIsEditing(false) // Reset to view mode when opening
+    setShowProfile(true)
   }
 
   return (
@@ -42,11 +52,10 @@ export default function TopHeader() {
         <div className="flex-grow mx-6">
           <Input
             placeholder="Search..."
-            className="w-80 mx-auto p-2 bg-gray-100 rounded-md" // Centering with mx-auto and removing the border
+            className="w-80 mx-auto p-2 bg-gray-100 rounded-md"
             icon={<Search className="h-5 w-5 text-gray-500" />}
           />
         </div>
-
 
         {/* Profile Dropdown */}
         <DropdownMenu>
@@ -56,11 +65,11 @@ export default function TopHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={openProfile}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setShowAbout(true)}>
               <Info className="mr-2 h-4 w-4" />
               <span>About</span>
             </DropdownMenuItem>
@@ -87,7 +96,73 @@ export default function TopHeader() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* About Dialog */}
+      <AlertDialog open={showAbout} onOpenChange={setShowAbout}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>About CareSphere</AlertDialogTitle>
+            <AlertDialogDescription>
+              CareSphere is a comprehensive healthcare management application designed to serve caregivers, patients,
+              and their families. Our features include:
+              <ul className="list-disc list-inside mt-2">
+                <li>Health observation and monitoring</li>
+                <li>Medication management</li>
+                <li>Appointment scheduling</li>
+                <li>Communication between caregivers and families</li>
+                <li>Reporting and analytics</li>
+                <li>Emergency alerts and notifications</li>
+              </ul>
+              Our mission is to empower care providers and simplify the lives of patients and their families through
+              innovative technology solutions.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>Close</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Profile Dialog */}
+      <AlertDialog open={showProfile} onOpenChange={setShowProfile}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Profile</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogDescription>
+            {isEditing ? (
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name:</label>
+                <Input placeholder="Enter your name" className="mt-1" />
+                <label className="block text-sm font-medium text-gray-700 mt-2">Phone number:</label>
+                <Input placeholder="Enter your Phone number" className="mt-1" />
+                <label className="block text-sm font-medium text-gray-700 mt-2">Email:</label>
+                <Input placeholder="Enter your email" className="mt-1" />
+              </div>
+            ) : (
+              <div>
+                <p><strong>Name:</strong>ABCD</p>
+                <p><strong>Phone number:</strong> 0123456789</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+              </div>
+            )}
+          </AlertDialogDescription>
+          <AlertDialogFooter>
+            {isEditing ? (
+              <AlertDialogAction onClick={() => setIsEditing(false)}>
+                <Save className="mr-2 h-4 w-4" />
+                Save
+              </AlertDialogAction>
+            ) : (
+              <Button onClick={() => setIsEditing(true)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </Button>
+            )}
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </header>
   )
 }
-
